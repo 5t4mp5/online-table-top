@@ -9,7 +9,7 @@ class ColorButton extends Component {
   
     handleClick = color => {
       this.setState({ color }, () => {
-        this.props.socket.emit('updateState', color);
+        this.props.socket.emit('stateUpdate', color);
       });
     };
   

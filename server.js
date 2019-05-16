@@ -13,6 +13,9 @@ const server = app.listen(port, ()=> console.log(`listening on port ${port}`));
 
 const io = socketio(server);
 
-io.on('connect', socket => socket.on('stateUpdate', color => {
-    socket.broadcast.emit('stateUpdate', color);   
-}));
+io.on('connect', socket => {
+    socket.on('stateUpdate', color => {
+        "STATE UPDATE";
+        socket.broadcast.emit('stateUpdate', color);   
+    });
+});
