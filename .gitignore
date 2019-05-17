@@ -1,8 +1,4 @@
 node_modules/
 dist/
 .DS_Store
-<<<<<<< HEAD
 stack-online-table-tap*
-=======
-stack-online-table-tap-41*
->>>>>>> firebase
