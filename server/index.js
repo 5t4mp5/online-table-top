@@ -16,6 +16,10 @@ app.use(
   })
 );
 
+app.use(express.json());
+
+app.use('/api/game-state', require('./routes/gameState'));
+
 app.get("/app.js", (req, res, next) =>
   res.sendFile(path.join(__dirname, "dist", "main.js"))
 );
