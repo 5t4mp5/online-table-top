@@ -4,12 +4,13 @@ const session = require("express-session");
 const path = require("path");
 const socketio = require("socket.io");
 const uuidV4 = require("uuid/v4");
+require('dotenv').config();
 
 const port = process.env.PORT || 3000;
 
 app.use(
   session({
-    secret: "This is not a very secure secret...",
+    secret: process.env.SESSION_KEY,
     resave: false,
     saveUninitialized: false
   })

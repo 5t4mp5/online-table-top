@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
-const serviceAccount = require('./stack-online-table-tap-411fe9c5ffac.json');
+require('dotenv').config();
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_ACCT))
 });
