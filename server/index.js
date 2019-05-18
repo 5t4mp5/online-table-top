@@ -40,7 +40,7 @@ const io = socketio(server);
 
 io.on("connect", socket => {
   socket.on("stateUpdate", color => {
-    "STATE UPDATE";
+    console.log("SERVER RECEIVED STATE UPDATE", color)
     socket.broadcast.emit("stateUpdate", color);
   });
 });

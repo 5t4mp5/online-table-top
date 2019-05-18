@@ -18,7 +18,6 @@ socket.on("connect", () => {
 class App extends Component {
   subscribeToStateUpdates = cb => {
     socket.on("stateUpdate", state => {
-      "state update ran";
       cb(state);
     });
   };
@@ -32,6 +31,9 @@ class App extends Component {
   updateGameState = (data, id) => {
     return axios
       .put(`/api/game-state/${id}`, data)
+      .then(() => {
+        socket.emit('stateUpdate', data)
+      })
       .catch(e => console.error(e));
   };
 

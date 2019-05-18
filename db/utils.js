@@ -30,6 +30,7 @@ const setPlayer = (gameId, playerId, playerMax = 2) => {
     .then(players => {
       if (!players.includes(playerId) && players.length < playerMax) {
         return stateRef.update({ players: [...players, playerId] });
+      } else if (players.includes(playerId)) {
       } else if (players.length >= playerMax) {
         throw new Error("Player Cap has been Reached");
       }
