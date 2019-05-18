@@ -1,4 +1,3 @@
-const db = require('./db');
-const { setGameState, updateGameState, getGameState } = require('./utils');
+const { setGameState, updateGameState, getGameState, setPlayer } = require('./utils');
 
-module.exports = { db, setGameState, updateGameState, getGameState };
+module.exports = { setGameState, updateGameState, getGameState, setPlayer };
