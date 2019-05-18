@@ -3,14 +3,23 @@ import React, { Component } from "react";
 class ColorButton extends Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.default = {
       color: "yellow",
       players: [],
-      myId: ""
+      myId: "",
+      resetMe: false
     };
+
+    this.state = this.default;
+
     props.subscribeToStateUpdates(state => {
       console.log("UPDATE STATE BEFORE SETSTATE", state);
-      this.setState(state, () => console.log("STATE AFTER UPDATE", this.state));
+      if(state.resetMe){
+        this.props.resetGame(this.default, 'test-0')
+      } else {
+        this.setState({...state, resetMe: false }, () => console.log("STATE AFTER UPDATE", this.state));
+      }
+      
     });
     props.subscribeToPlayerJoined(() => {
       this.props.fetchGameState("test-0").then(state => {
@@ -18,6 +27,11 @@ class ColorButton extends Component {
           console.log("PLAYERS AFTER JOIN: ", this.state.players)
         );
       });
+    });
+
+    props.subscribeToReset(() => {
+      this.props.fetchGameState("test-0")
+        .then(state => this.setState(state))
     });
   }
 
@@ -68,6 +82,7 @@ class ColorButton extends Component {
             }}
           />
         ))}
+        <button type='buton' className='btn btn-danger' onClick={() => this.props.resetGame('test-0', this.default)}>RESET GAME</button>
       </div>
     );
   }

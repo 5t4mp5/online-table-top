@@ -64,4 +64,8 @@ io.on("connect", socket => {
     socket.emit("playerJoined", player);
     socket.broadcast.emit("playerJoined", player);
   });
+
+  socket.on('reset', id => {
+    socket.broadcast.emit('reset', id);
+  });
 });

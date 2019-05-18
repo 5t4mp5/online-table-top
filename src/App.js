@@ -1,25 +1,14 @@
 import React, { Component } from "react";
 import openSocket from "socket.io-client";
 import axios from "axios";
+import uuidv4 from "uuid/v4";
 const socket = openSocket("http://localhost:3000");
-
-//async
-const addPlayer = (gameId, playerMax) => {
-  return axios.put(`/api/game-state/${gameId}/players/${playerMax}`)
-    .then(response => response.data)
-    .then(player => socket.emit("playerJoined", player))
-};
 
 //games
 import { ColorButton } from "./games";
 
-// socket.on("connect", () => {
-//   addPlayer("test-0", 2)
-//     .catch(e => console.error("ERROR", e))
-// });
-
 class App extends Component {
-  constructor(){
+  constructor() {
     super();
     this.state = {
       inGame: false,
@@ -28,7 +17,7 @@ class App extends Component {
   }
   subscribeToStateUpdates = cb => {
     socket.on("stateUpdate", state => {
-      console.log("SUBSCRIBE UPDATES", state)
+      console.log("SUBSCRIBE UPDATES", state);
       cb(state);
     });
   };
@@ -39,15 +28,23 @@ class App extends Component {
     });
   };
 
+  subscribeToReset = cb => {
+    socket.on("reset", () => {
+      cb();
+      this.setState({ inGame: false });
+    });
+  };
+
   addPlayer = (gameId, playerMax) => {
-    return axios.put(`/api/game-state/${gameId}/players/${playerMax}`)
+    return axios
+      .put(`/api/game-state/${gameId}/players/${playerMax}`)
       .then(response => {
         console.log(response);
         this.setState({ inGame: true });
         return response.data;
       })
       .then(player => socket.emit("playerJoined", player))
-      .catch(e => this.setState({ error: e.message }))
+      .catch(e => this.setState({ error: e.message }));
   };
 
   createGameState = (data, id) => {
@@ -74,26 +71,45 @@ class App extends Component {
 
   myTurn = (players, myId) => {
     return players[0] === myId;
-  }
+  };
+
+  resetGame = (id, defaultState) => {
+    return axios.put(`/api/game-state/${id}`, defaultState)
+      .then(() => socket.emit('reset', id))
+      .then(() => this.setState({ inGame: false }))
+      .catch(e => console.log(e));
+  };
 
   render() {
     return (
       <div>
-        {
-          !this.state.inGame
-            ? this.state.error ? <span className='alert alert-danger'>UNABLE TO ENTER GAME ROOM. ROOM IS FULL OR UNAVAILABLE</span>
-            : <button type='button' onClick={() => this.addPlayer('test-0', 2)} className='btn btn-primary'>JOIN GAME</button>
-
-            : <ColorButton
-              socket={socket}
-              fetchGameState={this.fetchGameState}
-              createGameState={this.createGameState}
-              updateGameState={this.updateGameState}
-              myTurn={this.myTurn}
-              subscribeToStateUpdates={this.subscribeToStateUpdates}
-              subscribeToPlayerJoined={this.subscribeToPlayerJoined}
-            />
-        }
+        {!this.state.inGame ? (
+          this.state.error ? (
+            <span className="alert alert-danger">
+              UNABLE TO ENTER GAME ROOM. ROOM IS FULL OR UNAVAILABLE
+            </span>
+          ) : (
+            <button
+              type="button"
+              onClick={() => this.addPlayer("test-0", 2)}
+              className="btn btn-primary"
+            >
+              JOIN GAME
+            </button>
+          )
+        ) : (
+          <ColorButton
+            socket={socket}
+            fetchGameState={this.fetchGameState}
+            createGameState={this.createGameState}
+            updateGameState={this.updateGameState}
+            myTurn={this.myTurn}
+            resetGame={this.resetGame}
+            subscribeToStateUpdates={this.subscribeToStateUpdates}
+            subscribeToPlayerJoined={this.subscribeToPlayerJoined}
+            subscribeToReset={this.subscribeToReset}
+          />
+        )}
       </div>
     );
   }
