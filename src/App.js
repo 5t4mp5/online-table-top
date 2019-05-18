@@ -39,9 +39,8 @@ class App extends Component {
   updateGameState = (data, id) => {
     return axios
       .put(`/api/game-state/${id}`, data)
-      .then(() => {
-        socket.emit("stateUpdate", data);
-      })
+      .then(() => this.fetchGameState(id))
+      .then(state => socket.emit("stateUpdate", state))
       .catch(e => console.error(e));
   };
 
@@ -53,6 +52,10 @@ class App extends Component {
       .catch(e => console.error(e));
   };
 
+  myTurn = (players, myId) => {
+    return players[0] === myId;
+  }
+
   render() {
     return (
       <ColorButton
@@ -60,6 +63,7 @@ class App extends Component {
         fetchGameState={this.fetchGameState}
         createGameState={this.createGameState}
         updateGameState={this.updateGameState}
+        myTurn={this.myTurn}
         subscribeToStateUpdates={this.subscribeToStateUpdates}
         subscribeToPlayerJoined={this.subscribeToPlayerJoined}
       />

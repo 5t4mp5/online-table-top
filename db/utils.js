@@ -14,7 +14,10 @@ const updateGameState = (update, id) => {
     .update(update)
     .then(() => changeTurn(id))
     .then(() => stateRef.get())
-    .then(state => state.data());
+    .then(state => {
+      console.log(state.data());
+      return state.data();
+    });
 };
 
 const getGameState = id => {
@@ -40,13 +43,13 @@ const setPlayer = (gameId, playerId, playerMax = 2) => {
 
 const changeTurn = id => {
   const stateRef = db.collection("game-states").doc(id);
-  stateRef.get()
+  return stateRef.get()
     .then(response => response.data())
     .then(state => state.players)
     .then(players => {
       if(players.length > 1){
         const newPlayerOrder = [...players.slice(1), ...players.slice(0,1)];
-        stateRef.update({
+        return stateRef.update({
           players: newPlayerOrder
         })
       }
