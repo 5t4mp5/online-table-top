@@ -6,19 +6,27 @@ const socket = openSocket("http://localhost:3000");
 //async
 const addPlayer = (gameId, playerMax) => {
   axios.put(`/api/game-state/${gameId}/players/${playerMax}`)
+    .then(response => response.data)
+    .then(player => socket.emit("playerJoined", player));
 };
 
 //games
 import { ColorButton } from "./games";
 
 socket.on("connect", () => {
-  addPlayer('test-0', 2)
+  addPlayer("test-0", 2)
 });
 
 class App extends Component {
   subscribeToStateUpdates = cb => {
     socket.on("stateUpdate", state => {
       cb(state);
+    });
+  };
+
+  subscribeToPlayerJoined = cb => {
+    socket.on("playerJoined", player => {
+      cb(player);
     });
   };
 
@@ -32,7 +40,7 @@ class App extends Component {
     return axios
       .put(`/api/game-state/${id}`, data)
       .then(() => {
-        socket.emit('stateUpdate', data)
+        socket.emit("stateUpdate", data);
       })
       .catch(e => console.error(e));
   };
@@ -49,10 +57,11 @@ class App extends Component {
     return (
       <ColorButton
         socket={socket}
-        fetchGameState = {this.fetchGameState}
+        fetchGameState={this.fetchGameState}
         createGameState={this.createGameState}
         updateGameState={this.updateGameState}
         subscribeToStateUpdates={this.subscribeToStateUpdates}
+        subscribeToPlayerJoined={this.subscribeToPlayerJoined}
       />
     );
   }

@@ -6,8 +6,15 @@ class ColorButton extends Component {
       this.state = { 
         color: "yellow",
         players: [],
+        myId: ""
      };
-      props.subscribeToStateUpdates(state => this.setState(state))
+      props.subscribeToStateUpdates(state => this.setState(state));
+      props.subscribeToPlayerJoined(() => {
+        this.props.fetchGameState('test-0')
+          .then(state => {
+            this.setState(state, () => console.log("PLAYERS AFTER JOIN: ", this.state.players));
+          })
+      });
     }
 
     componentDidMount(){

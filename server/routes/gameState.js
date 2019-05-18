@@ -3,7 +3,7 @@ const { setGameState, updateGameState, getGameState, setPlayer } = require('../.
 
 router.put('/:id/players/:playerMax', (req, res, next) => {
     setPlayer(req.params.id, req.session.userId,req.params.playerMax)
-        .then(() => res.sendStatus(201))
+        .then(() => res.json({ player: req.session.userId }))
         .catch(e => console.error(e));
 });
 
