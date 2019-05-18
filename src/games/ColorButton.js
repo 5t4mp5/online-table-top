@@ -12,7 +12,7 @@ class ColorButton extends Component {
 
     componentDidMount(){
       this.props.fetchGameState('test-0')
-        .then(state => this.setState(state))
+        .then(state => this.setState(state, () => console.log(this.state)))
     }
   
     handleClick = color => {

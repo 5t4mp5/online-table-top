@@ -9,7 +9,10 @@ router.put('/:id/players/:playerMax', (req, res, next) => {
 
 router.get('/:id', (req, res, next) => {
     getGameState(req.params.id)
-        .then(state => res.json(state))
+        .then(state => {
+            state.myId = req.session.userId,
+            res.json(state);
+        })
         .catch(e => console.log(e));
 });
 
