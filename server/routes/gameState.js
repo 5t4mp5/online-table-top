@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const { setGameState, updateGameState, getGameState, setPlayer } = require('../../db');
 
-router.get('/:id/players/:playerId', (req, res, next) => {
-    setPlayer(req.params.id, req.params.playerId)
+router.put('/:id/players/:playerMax', (req, res, next) => {
+    setPlayer(req.params.id, req.session.userId,req.params.playerMax)
         .then(() => res.sendStatus(201))
         .catch(e => console.error(e));
 });

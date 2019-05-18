@@ -4,18 +4,15 @@ import axios from "axios";
 const socket = openSocket("http://localhost:3000");
 
 //async
-const createGameState = (data, id) => {
-  axios
-    .post(`/api/game-state/${id}`, data)
-    .then(state => console.log(state))
-    .catch(e => console.error(e));
+const addPlayer = (gameId, playerMax) => {
+  axios.put(`/api/game-state/${gameId}/players/${playerMax}`)
 };
 
 //games
 import { ColorButton } from "./games";
 
 socket.on("connect", () => {
-  console.log(`I HAVE CONNECTED!`);
+  addPlayer('test-0', 2)
 });
 
 class App extends Component {
