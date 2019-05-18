@@ -12,6 +12,7 @@ const updateGameState = (update, id) => {
   const stateRef = db.collection("game-states").doc(id);
   return stateRef
     .update(update)
+    .then(() => changeTurn(id))
     .then(() => stateRef.get())
     .then(state => state.data());
 };
@@ -33,6 +34,21 @@ const setPlayer = (gameId, playerId, playerMax = 2) => {
       } else if (players.includes(playerId)) {
       } else if (players.length >= playerMax) {
         throw new Error("Player Cap has been Reached");
+      }
+    });
+};
+
+const changeTurn = id => {
+  const stateRef = db.collection("game-states").doc(id);
+  stateRef.get()
+    .then(response => response.data())
+    .then(state => state.players)
+    .then(players => {
+      if(players.length > 1){
+        const newPlayerOrder = [...players.slice(1), ...players.slice(0,1)];
+        stateRef.update({
+          players: newPlayerOrder
+        })
       }
     });
 };
