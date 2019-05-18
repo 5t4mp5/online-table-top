@@ -21,7 +21,7 @@ app.use(express.json());
 app.use('/api/game-state', require('./routes/gameState'));
 
 app.get("/app.js", (req, res, next) =>
-  res.sendFile(path.join(__dirname, "dist", "main.js"))
+  res.sendFile(path.join(__dirname, "..", "dist", "main.js"))
 );
 
 app.get("/", (req, res, next) => {
@@ -31,7 +31,7 @@ app.get("/", (req, res, next) => {
   } else {
       console.log("SESSION EXISTS: ", req.session.userId);
   }
-  res.sendFile(path.join(__dirname, "index.html"));
+  res.sendFile(path.join(__dirname, "..", "index.html"));
 });
 
 const server = app.listen(port, () => console.log(`listening on port ${port}`));

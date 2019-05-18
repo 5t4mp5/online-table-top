@@ -6,10 +6,15 @@ class ColorButton extends Component {
       this.state = { color: "yellow" };
       props.subscribeToStateUpdates(color => this.setState({ color }))
     }
+
+    componentDidMount(){
+      this.props.fetchGameState('test-0')
+        .then(state => this.setState({ color: state.color }))
+    }
   
     handleClick = color => {
       this.setState({ color }, () => {
-        this.props.socket.emit('stateUpdate', color);
+        this.props.updateGameState({ color }, 'test-0')
       });
     };
   
