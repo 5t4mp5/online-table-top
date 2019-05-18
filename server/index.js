@@ -41,7 +41,8 @@ const io = socketio(server);
 io.on("connect", socket => {
   socket.on("stateUpdate", update => {
     console.log("SERVER RECEIVED STATE UPDATE", update);
-    socket.broadcast.emit("stateUpdate", update);
+    socket.emit("stateUpdate", { players: update.players })
+    socket.broadcast.emit("stateUpdate", { players: update.players, color: update.color });
   });
   
   socket.on('playerJoined', player => {

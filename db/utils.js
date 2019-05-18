@@ -15,7 +15,7 @@ const updateGameState = (update, id) => {
     .then(() => changeTurn(id))
     .then(() => stateRef.get())
     .then(state => {
-      console.log(state.data());
+      console.log("DB AFTER UPDATE", state.data());
       return state.data();
     });
 };

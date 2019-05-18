@@ -20,6 +20,7 @@ socket.on("connect", () => {
 class App extends Component {
   subscribeToStateUpdates = cb => {
     socket.on("stateUpdate", state => {
+      console.log("SUBSCRIBE UPDATES", state)
       cb(state);
     });
   };

@@ -8,7 +8,10 @@ class ColorButton extends Component {
       players: [],
       myId: ""
     };
-    props.subscribeToStateUpdates(state => this.setState(state), () => console.log("STATE AFTER UPDATE", this.state));
+    props.subscribeToStateUpdates(state => {
+      console.log("UPDATE STATE BEFORE SETSTATE", state);
+      this.setState(state, () => console.log("STATE AFTER UPDATE", this.state));
+    });
     props.subscribeToPlayerJoined(() => {
       this.props.fetchGameState("test-0").then(state => {
         this.setState(state, () =>
@@ -36,6 +39,13 @@ class ColorButton extends Component {
     const colors = ["red", "blue", "yellow", "green"];
     return (
       <div>
+        <h3>
+          {
+            this.props.myTurn(this.state.players, this.state.myId)
+              ? "MY TURN"
+              : "NOT MY TURN"
+          }
+        </h3>
         <div
           style={{
             width: "50%",
