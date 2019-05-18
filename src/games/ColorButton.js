@@ -82,7 +82,7 @@ class ColorButton extends Component {
             }}
           />
         ))}
-        <button type='buton' className='btn btn-danger' onClick={() => this.props.resetGame('test-0', this.default)}>RESET GAME</button>
+        <button type='buton' className='btn btn-danger' onClick={() => this.props.resetGame('test-0', this.default)}>EXIT AND RESET GAME</button>
       </div>
     );
   }
