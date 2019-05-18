@@ -23,16 +23,17 @@ const getGameState = id => {
 
 const setPlayer = (gameId, playerId, playerMax = 2) => {
   const stateRef = db.collection("game-states").doc(gameId);
-  return stateRef.get()
+  return stateRef
+    .get()
     .then(response => response.data())
     .then(state => state.players)
     .then(players => {
-      if(!players.includes(playerId) && players.length < playerMax){
+      if (!players.includes(playerId) && players.length < playerMax) {
         return stateRef.update({ players: [...players, playerId] });
-      } else {
-        throw new Error(players.includes(playerId) ? 'Player Already in Game' : 'Player Cap has been Reached');
+      } else if (players.length >= playerMax) {
+        throw new Error("Player Cap has been Reached");
       }
-    })
+    });
 };
 
 module.exports = { setGameState, updateGameState, getGameState, setPlayer };

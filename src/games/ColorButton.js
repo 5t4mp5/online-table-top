@@ -3,13 +3,16 @@ import React, { Component } from 'react';
 class ColorButton extends Component {
     constructor(props) {
       super(props);
-      this.state = { color: "yellow" };
-      props.subscribeToStateUpdates(color => this.setState({ color }))
+      this.state = { 
+        color: "yellow",
+        players: [],
+     };
+      props.subscribeToStateUpdates(state => this.setState(state))
     }
 
     componentDidMount(){
       this.props.fetchGameState('test-0')
-        .then(state => this.setState({ color: state.color }))
+        .then(state => this.setState(state))
     }
   
     handleClick = color => {
