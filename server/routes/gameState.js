@@ -4,7 +4,7 @@ const { setGameState, updateGameState, getGameState, setPlayer } = require('../.
 router.put('/:id/players/:playerMax', (req, res, next) => {
     setPlayer(req.params.id, req.session.userId,req.params.playerMax)
         .then(() => res.json({ player: req.session.userId }))
-        .catch(e => console.error(e));
+        .catch(next);
 });
 
 router.get('/:id', (req, res, next) => {
@@ -13,19 +13,19 @@ router.get('/:id', (req, res, next) => {
             state.myId = req.session.userId,
             res.json(state);
         })
-        .catch(e => console.log(e));
+        .catch(next);
 });
 
 router.post('/:id', (req, res, next) => {
     setGameState(req.body, req.params.id)
         .then(state => res.json(state))
-        .catch(e => console.log(e));
+        .catch(next);
 });
 
 router.put('/:id', (req, res, next) => {
     updateGameState(req.body, req.params.id)
         .then(state => res.json(state))
-        .catch(e => console.log(e));
+        .catch(next);
 });
 
 module.exports = router;

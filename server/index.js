@@ -34,6 +34,20 @@ app.get("/", (req, res, next) => {
   res.sendFile(path.join(__dirname, "..", "index.html"));
 });
 
+//handle 404
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+//handle 500
+app.use((error, req, res, next) => {
+  console.log("ROUTER HANDLER", error.message);
+  res.status(500).send(error);
+});
+
+
 const server = app.listen(port, () => console.log(`listening on port ${port}`));
 
 const io = socketio(server);
